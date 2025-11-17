@@ -102,7 +102,7 @@ function MyTeams() {
 
     if (isLoading) {
         return (
-            <div className="grid place-items-center bg-[#1E2021] grid-rows-1">
+            <div className="grid place-items-center h-full grid-rows-1">
                 <div className="grid row-span-1 p-20">
                     <Loader />
                     <h2 className="text-xl text-white">Loading...</h2>

@@ -93,10 +93,10 @@ export default function Pokedex({ setSelectedPokemons, selectedPokemons }) {
 
   if (error) {
     return (
-      <div className='grid place-items-center bg-[#1E2021] grid-rows-1 '>
+      <div className='grid place-items-center grid-rows-1 h-full overflow-hidden'>
         <div className='grid row-span-1 p-20'>
           <Loader />
-          <h2 className='text-xl'>. . . Some error occured please refresh</h2>
+          <h2 className='md:text-xl text-lg text-white'>. . . Some error occured please refresh</h2>
         </div>
       </div>
     )
@@ -105,25 +105,26 @@ export default function Pokedex({ setSelectedPokemons, selectedPokemons }) {
   if (isLoading) {
     return (
 
-      <div className='grid place-items-center bg-[#1E2021] grid-rows-1 '>
+      <div className='grid place-items-center grid-rows-1 h-full overflow-hidden'>
         <div className='grid row-span-1 px-36 sm:px-96'>
           <Loader />
-          <h2 className='text-xl'>. . . Loading</h2>
+          <h2 className='md:text-xl text-lg text-white'>. . . Loading</h2>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="w-full overflow-auto h-full bg-[#111] p-4 rounded-lg">
+    <div className="w-full overflow-auto h-full rounded-lg flex items-center">
       <div
-        className="w-full h-full rounded-lg shadow-lg"
+        className="w-full rounded-lg shadow-lg"
         style={{
           backgroundColor: "#1A1A1D",
-          padding: "16px",
+          padding: "5px",
           border: "1px solid #2c2c2c",
         }}
       >
+        <h1 className='text-white font-bold text-lg px-2'>POKEDEX</h1>
         <DataGrid
           sx={{
             color: "#e0e0e0",

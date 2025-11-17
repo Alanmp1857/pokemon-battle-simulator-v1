@@ -93,11 +93,10 @@ const TeamBuilder = () => {
 
   return (
     <div className="h-full w-full grid place-items-center sm:px-4  ">
-      <div className="h-full w-full max-w-[95rem] grid grid-cols-1 sm:grid-cols-4 gap-4 p-4">
-
+      <div className="h-full w-full max-w-7xl xl:max-w-[100rem] grid grid-cols-1 sm:grid-cols-6 gap-4 p-4">
         {/* LEFT SIDE – POKEMON LIST OR MOVES TABLE */}
-        <div className="sm:col-span-3 bg-[#1E1F22] rounded-lg shadow-lg border border-[#2a2a2a]">
-          <div className="h-full overflow-hidden rounded-lg">
+        <div className="sm:col-span-4 rounded-lg shadow-lg ">
+          <div className="h-full overflow-auto rounded-lg">
             {toggle ? (
               <MovesTable pokemon={selectedPokemon} selectedMoves={selectedMoves} setSelectedMoves={setSelectedMoves} />
             ) : (
@@ -107,10 +106,10 @@ const TeamBuilder = () => {
         </div>
 
         {/* RIGHT SIDE – SELECTED POKEMON PANEL */}
-        <div className="bg-[#1E1F22] rounded-xl shadow-xl border border-[#2a2a2a] flex flex-col m-auto py-8 p-4 sm:col-span-1 min-w-[450px] max-h-[100vh] overflow-hidden">
-
+        <div className="  flex flex-col justify-center sm:col-span-2 ">
           {selectedPokemon ? (
-            <>
+            <div className='bg-[#1E1F22] p-4 rounded-xl shadow-lg border border-[#2a2a2a] '>
+              <h2 className='text-center text-white font-semibold text-lg py-2'>T E A M</h2>
               {/* TEAM PANEL */}
               <div className="grid grid-cols-6 gap-2 pb-2">
                 {selectedPokemons.map((pokemon, ind) => (
@@ -227,7 +226,7 @@ const TeamBuilder = () => {
                   </div>
                 </div>
               </div>
-            </>
+            </div>
           ) : (
             <div className="grid place-items-center h-full text-center px-4">
               <h1 className="text-lg text-blue-300 font-bold">

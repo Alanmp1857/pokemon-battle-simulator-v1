@@ -222,7 +222,11 @@ const TeamBuilder = () => {
                       {toggle ? "Back to Pokémons" : "Add Moves"}
                     </Button>
 
-                    <SnackBar title={title} severity={severity} triggerOnClick={handleSave} />
+                    {/* <Button variant="contained" size="small" color="success" onClick={handleSave}>
+                      Save Team
+                    </Button> */}
+                    {/* save button in here */}
+                    <SnackBar title={title} severity={severity} func={handleSave} />
                   </div>
                 </div>
               </div>

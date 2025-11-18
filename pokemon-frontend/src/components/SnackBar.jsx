@@ -7,12 +7,13 @@ const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-const SnackBar = ({ title, severity }) => {
+const SnackBar = ({ title, severity ,func}) => {
 
     const [open, setOpen] = React.useState(false);
 
     const handleClick = () => {
         setOpen(true);
+        if(func) func();
     };
 
     const handleClose = (event, reason) => {

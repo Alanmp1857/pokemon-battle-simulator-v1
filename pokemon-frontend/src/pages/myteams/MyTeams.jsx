@@ -15,7 +15,7 @@ import { userContext } from '../../App';
 
 const fetcher = async (...args) => {
     const resp = await axios.get(...args, { withCredentials: true });
-    if (!resp.data.data || resp.data.data === undefined) throw new Error("No teams found! please build your team first !")
+    if (!resp.data.data || resp.data.data === undefined || resp.data.data.length === 0) throw new Error("No teams found! please build your team first !")
 
     return resp.data.data;
 };
@@ -32,7 +32,7 @@ export const TeamSlots = ({ team, border }) => {
             className={`grid grid-cols-6 gap-2 p-2 bg-[#1E2021] ${border ? 'border-red-400' : 'border-slate-400'
                 } hover:border-green-400 hover:transition-colors duration-300 cursor-pointer border-2`}
         >
-            {team.map((pokemon, index) => (
+            {team?.map((pokemon, index) => (
                 <div key={index} className="flex justify-center items-center bg-[#343434] p-2">
                     <img className="sm:h-20 scale-[1.4] sm:scale-100" src={pokemon.image} />
                 </div>
@@ -115,7 +115,7 @@ function MyTeams() {
         <div className="grid sm:grid-cols-3 h-full grid-cols-1 gap-4 sm:grid-rows-1 grid-rows-2 p-2">
             <div className="sm:col-span-2 bg-[#1E2021] p-4 flex flex-col gap-4">
                 <div className="grid place-items-center gap-2">
-                    {ind != undefined && <TeamSlots border team={data[ind].team} />}
+                    {(ind != undefined && ind<data.length) && <TeamSlots border team={data[ind].team} />}
                     <div className="flex gap-2">
                         <Button onClick={handleEdit} variant="contained" endIcon={<EditIcon />}>
                             Edit

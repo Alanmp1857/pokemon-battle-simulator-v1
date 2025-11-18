@@ -30,7 +30,7 @@ export const TeamSlots = ({ team, selected }) => {
     return (
         <div
             className={`
-                            grid grid-cols-6 gap-2 p-3 rounded-lg cursor-pointer transition-all
+                            grid grid-cols-6 gap-1 sm:gap-2 p-3 rounded-lg cursor-pointer transition-all
                             ${selected ? "border-2 border-green-400 bg-[#1f1f1f]" : "border border-[#333] bg-[#171717]"}
                             hover:border-green-300 hover:bg-[#1d1d1d]
                         `}
@@ -50,7 +50,7 @@ export const TeamSlots = ({ team, selected }) => {
                             "
                 >
                     <img
-                        className="h-14 sm:h-16 drop-shadow-[0_0_4px_rgba(0,0,0,0.5)]"
+                        className="sm:h-16 scale-150 sm:scale-100 drop-shadow-[0_0_4px_rgba(0,0,0,0.5)]"
                         src={pokemon.image}
                     />
                 </div>
@@ -117,7 +117,7 @@ function MyTeams() {
         );
 
     return (
-        <div className="grid  gap-6 p-4 h-full max-w-7xl xl:max-w-[100rem] place-items-center mx-auto ">
+        <div className="grid  gap-6 p-0 sm:p-4 h-full max-w-7xl xl:max-w-[100rem] place-items-center mx-auto ">
             <div className="grid sm:grid-cols-3 grid-cols-1 gap-6 p-4">
                 {/* LEFT SIDE — Team Selection */}
                 <div className="sm:col-span-2 flex flex-col gap-6">

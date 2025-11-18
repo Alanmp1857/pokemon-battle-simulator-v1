@@ -2,6 +2,6 @@
 const urls = ['http://localhost:8000', 'https://pokeapi-4khl.onrender.com',"https://pokes-api.vercel.app","https://poke-api-iota-navy.vercel.app"]
 
 
-const api = urls[3];
+const api = urls[1];
 
 export default api 

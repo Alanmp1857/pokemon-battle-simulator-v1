@@ -34,3 +34,12 @@ html,body,#root,.app,content{
 .element-class::-webkit-scrollbar {
   display: none; /* Safari and Chrome */
 }
+
+@keyframes pulse-slow {
+  0% { opacity: 0.25; }
+  50% { opacity: 0.4; }
+  100% { opacity: 0.25; }
+}
+.animate-pulse-slow {
+  animation: pulse-slow 6s ease-in-out infinite;
+}

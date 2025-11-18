@@ -150,15 +150,25 @@ function BattleMatchMaking() {
   if (!roomid) {
     return (
       <ThemeProvider theme={darkTheme}>
-        <div className="h-full flex flex-col p-16 items-center gap-4">
-          <h1 className='uppercase text-center text-bold text-4xl text-transparent bg-[url("https://img1.picmix.com/output/stamp/normal/6/9/4/3/1503496_0792d.gif")] bg-center bg-cover bg-clip-text '>
-            get ready for the battle
-          </h1>
+        <div className="h-full flex flex-col items-center gap-10 py-12 p-4 sm:p-2 ">
 
-          {/* Challenger selection */}
-          {!loading && (
-            <div className="flex flex-col gap-4 text-green-400 text-bold text-xl items-center">
-              <h3>Challenge User / Friend</h3>
+          {/* TITLE */}
+          {/* <h1 className="uppercase text-center text-5xl font-extrabold tracking-wide
+          text-transparent bg-gradient-to-r from-green-300 via-yellow-300 to-red-400 
+          bg-clip-text drop-shadow-[0_0_8px_rgba(255,255,255,0.25)]
+          animate-pulse
+        ">
+            Get Ready For Battle
+          </h1> */}
+
+          {/* CARD WRAPPER */}
+          <div className="w-full max-w-3xl bg-[#111] rounded-2xl shadow-xl border border-[#1f1f1f] p-8 flex flex-col gap-10">
+
+            {/* CHALLENGE FRIEND */}
+            <div className="flex flex-col gap-4 items-center">
+              <h3 className="text-green-400 text-2xl font-bold tracking-wider">
+                Challenge a Friend
+              </h3>
 
               <Autocomplete
                 value={value}
@@ -166,47 +176,142 @@ function BattleMatchMaking() {
                 inputValue={inputValue}
                 onInputChange={(e, val) => setInputValue(val)}
                 options={data?.filter((u) => u !== userinfo.username) || []}
-                sx={{ width: 300 }}
-                renderInput={(params) => <TextField {...params} label="Search user..." />}
+                sx={{
+                  width: 350,
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "10px",
+                  },
+                }}
+                renderInput={(params) => (
+                  <TextField {...params} label="Search user..." />
+                )}
               />
-            </div>
-          )}
 
-          {/* Challenge button */}
-          {value && !loading && (
-            <div className="text-blue-400 mt-4 text-2xl">
-              {value}{" "}
-              <Button variant="contained" color="success">
-                Challenge
-              </Button>
+              {/* Challenge Button */}
+              {value && !loading && (
+                <div className="flex items-center gap-3 mt-2">
+                  <span className="text-blue-300 text-xl">{value}</span>
+                  <Button variant="contained" color="success">
+                    Challenge
+                  </Button>
+                </div>
+              )}
             </div>
-          )}
 
-          {/* Search Online Button */}
-          <div className="mt-8">
-            {loading ? (
-              <div className="flex flex-col gap-8 text-white">
-                <Button variant="contained" color="error" onClick={handleStopSearch}>
-                  Stop
+            {/* SEPARATOR */}
+            <div className="w-full h-[1px] bg-[#222]"></div>
+
+            {/* SEARCH ONLINE */}
+            <div className="flex flex-col items-center gap-6">
+              <h3 className="text-slate-300 tracking-wide text-lg uppercase">
+                Or search for a random opponent
+              </h3>
+
+              {loading ? (
+                <div className="flex flex-col items-center gap-6">
+                  <Button variant="contained" color="error" onClick={handleStopSearch}>
+                    Cancel Search
+                  </Button>
+
+                  <FindLoader />
+
+                  <p className="text-slate-400 animate-pulse">
+                    Searching players...
+                  </p>
+                </div>
+              ) : (
+                <Button
+                  variant="contained"
+                  disabled={inputValue !== ""}
+                  onClick={handleSearchPlayers}
+                  color="success"
+                  sx={{ px: 6, py: 1.4, borderRadius: "10px" }}
+                >
+                  Find Match
                 </Button>
-                <FindLoader />
-                ... searching players
-              </div>
-            ) : (
-              <Button
-                variant="contained"
-                disabled={inputValue !== ""}
-                onClick={handleSearchPlayers}
-                color="success"
-              >
-                Search online
-              </Button>
-            )}
+              )}
+            </div>
           </div>
+          {/* HOW THE GAME WORKS SECTION */}
+          <div className="bg-[#101010] mt-4 rounded-xl border border-[#1f1f1f] p-6 shadow-lg text-slate-300">
+            <h2 className="text-xl font-bold text-green-400 uppercase tracking-wider mb-3">
+              How the Battle Works
+            </h2>
+
+            <ul className="list-disc ml-5 space-y-2 leading-relaxed">
+              <li>
+                When two players connect, the battle begins. Each round both players must
+                <span className="text-green-300 font-semibold"> choose a Pokémon and a move</span>.
+              </li>
+
+              <li>
+                <span className="text-yellow-300 font-semibold">Both players must lock in their move</span>.
+                Only after both have selected moves do the attacks begin.
+              </li>
+
+              <li>
+                Every round has a <span className="text-red-400 font-bold">30-second timer</span>.
+                You must select both Pokémon and a move before it ends.
+              </li>
+
+              <li>
+                Moves have <span className="text-blue-300 font-semibold">PP (Power Points)</span>.
+                PP determines how many times you can use a particular move.
+              </li>
+
+              <li>
+                If you fail to choose a Pokémon or a move within time:
+                <span className="text-red-500 font-bold"> you automatically resign</span>.
+              </li>
+
+              <li>
+                If all your Pokémon’s HP reaches zero, you
+                <span className="text-red-400 font-bold"> lose the battle</span>.
+              </li>
+
+              <li>
+                A chat window is provided —
+                <span className="text-purple-300 font-semibold"> please be respectful</span>.
+              </li>
+            </ul>
+
+            {/* DAMAGE CALC EXPLANATION */}
+            <h3 className="text-lg font-semibold text-blue-300 mt-6 mb-2">
+              How Damage Is Calculated
+            </h3>
+
+            <p className="text-slate-400 text-sm leading-relaxed">
+              Every attack uses your Pokémon’s stats, the opponent’s stats,
+              move power, crit chance and accuracy. The formula is simplified below:
+            </p>
+
+            <div className="bg-[#0d0d0d] border border-[#222] rounded-lg p-4 mt-3 text-sm text-slate-300 leading-relaxed">
+              <p className="mb-2 text-green-300 font-bold">Damage Factors:</p>
+              <ul className="list-disc ml-5 space-y-1">
+                <li>Move Power</li>
+                <li>Your Pokémon’s <span className="text-green-200">Attack / Sp. Attack</span></li>
+                <li>Opponent’s <span className="text-red-200">Defense / Sp. Defense</span></li>
+                <li>Critical Hit (50% chance)</li>
+                <li>STAB – Same Type Attack Bonus (×1.5)</li>
+                <li>Accuracy Check (Move can miss!)</li>
+                <li>Attack order (higher Speed Pokémon attacks first)</li>
+              </ul>
+
+              <p className="mt-4 italic text-slate-400">
+                In simple terms:
+                <span className="text-green-300">
+                  Higher attack, faster speed, and strong moves = more damage.
+                </span>
+                Higher defense and HP reduce the damage you take.
+              </p>
+            </div>
+          </div>
+
         </div>
       </ThemeProvider>
     );
   }
+
 
   // AFTER MATCH FOUND → BATTLE PAGE
   return (

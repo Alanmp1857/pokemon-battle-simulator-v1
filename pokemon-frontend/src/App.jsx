@@ -41,7 +41,7 @@ function App() {
       <userContext.Provider value={{ userinfo, setUserinfo, battleTeam, setBattleTeam }}>
         <Router>
           <Navbar />
-          <div className='flex-grow'>
+          <div className='flex-grow pt-[100px]'>
             <Routes>
               <Route path='/' exact element={<Home />}></Route>
               <Route path='/teambuilder' exact element={<TeamBuilder />}></Route>

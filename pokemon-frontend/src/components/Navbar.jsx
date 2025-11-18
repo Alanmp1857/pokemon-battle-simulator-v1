@@ -1,59 +1,172 @@
-import React, { useContext, useState } from 'react';
-import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
-import { Link, useNavigate } from 'react-router-dom';
-import './Buttons/ButtonP.css'
-import { Button } from '@mui/material';
-import { userContext } from '../App';
-import axios from 'axios';
-import api from '../helper/api';
+import React, { useContext, useState } from "react";
+import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { userContext } from "../App";
+import axios from "axios";
+import api from "../helper/api";
+import { Button } from "@mui/material";
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
-
   const { userinfo, setUserinfo } = useContext(userContext);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  // console.log(userinfo)
+  const handleNav = () => setNav(!nav);
 
-  const navigate = useNavigate()
-
-  const handleNav = () => {
-    setNav(!nav);
-  };
   const handleLogout = async () => {
-    await axios.get(`${api}/user/logout`, {
-      withCredentials: true
-    });
+    await axios.get(`${api}/user/logout`, { withCredentials: true });
     localStorage.clear();
-    navigate('/');
+    navigate("/");
     setUserinfo(undefined);
-  }
+  };
+
+  const navItems = [
+    { name: "Home", path: "/" },
+    { name: "TeamBuilder", path: "/teambuilder" },
+    { name: "MyTeams", path: "/myteams" },
+    { name: "Battle", path: "/battle" },
+    { name: "LeaderBoard", path: "/leaderboard" },
+  ];
 
   return (
-    <div className='flex justify-between w-full items-center mx-auto px-4 text-white'>
-      <Link to='/'><h1 className='ml-4 text-3xl font-bold text-[#00df9a]'>SHOWDOWN</h1></Link>
-      <ul className='hidden md:flex items-center'>
-        <Link to='/'><li className='p-4 hover:text-[#00df9a] transition-colors duration-500 ease-in-out cursor-pointer'>Home</li></Link>
-        <Link to='/teambuilder'><li className='p-4 hover:text-[#00df9a] transition-colors duration-500 ease-in-out cursor-pointer'>TeamBuilder</li></Link>
-        <Link to='/myteams'><li className='p-4 hover:text-[#00df9a] transition-colors duration-500 ease-in-out cursor-pointer'>MyTeams</li></Link>
-        <Link to='/battle'><li className='p-4 hover:text-[#00df9a] transition-colors duration-500 ease-in-out cursor-pointer'>Battle</li></Link>
-        <Link to='/leaderboard'><li className='p-4 hover:text-[#00df9a] transition-colors duration-500 ease-in-out cursor-pointer'>LeaderBoard</li></Link>
-        {userinfo ? <li className='p-4 text-[#00df9a] font-bold uppercase cursor-pointer'>{userinfo.username}</li> : <Button onClick={() => navigate('/signin')} id='idr' variant='contained' size='small' sx={{ marginLeft: '40px', backgroundColor: '#560bad' }}>sign-in</Button>}
-        {userinfo && <Button onClick={() => { handleLogout() }} id='idr' variant='contained' size='small' sx={{ marginLeft: '0px', backgroundColor: '#560bad' }}>logout</Button>}
-      </ul>
-      <div onClick={handleNav} className='block md:hidden'>
-        {nav ? <AiOutlineClose size={20} /> : <AiOutlineMenu size={20} />}
+    <nav className="fixed w-full z-50 sm:backdrop-blur-md bg-black/20 border-b border-[#1d1d1d] shadow-lg">
+      <div className="flex justify-between items-center w-full px-6 py-3 text-white">
+
+        {/* LOGO */}
+        <Link to="/">
+          <h1 className="text-3xl font-bold text-[#00df9a] tracking-wider hover:opacity-80 transition">
+            SHOWDOWN
+          </h1>
+        </Link>
+
+        {/* DESKTOP MENU */}
+        <ul className="hidden md:flex items-center gap-6">
+          {navItems.map((item) => (
+            <Link key={item.name} to={item.path}>
+              <li
+                className={`relative px-2 py-1 cursor-pointer text-sm tracking-wide transition-colors 
+                hover:text-[#00df9a]
+                ${
+                  location.pathname === item.path
+                    ? "text-[#00df9a] font-semibold"
+                    : "text-gray-200"
+                }`}
+              >
+                {item.name}
+
+                {/* Active underline */}
+                {location.pathname === item.path && (
+                  <div className="absolute left-0 right-0 -bottom-1 h-[2px] bg-[#00df9a] rounded-full shadow-glow" />
+                )}
+              </li>
+            </Link>
+          ))}
+
+          {/* USERNAME */}
+          {userinfo && (
+            <li className="px-3 py-1 text-[#00df9a] font-semibold uppercase tracking-wide">
+              {userinfo.username}
+            </li>
+          )}
+
+          {/* AUTH BUTTONS */}
+          {!userinfo ? (
+            <Button
+              onClick={() => navigate("/signin")}
+              size="small"
+              variant="contained"
+              sx={{
+                backgroundColor: "#7b2cbf",
+                borderRadius: "8px",
+                textTransform: "none",
+                "&:hover": { backgroundColor: "#5a189a" },
+              }}
+            >
+              Sign In
+            </Button>
+          ) : (
+            <Button
+              onClick={handleLogout}
+              size="small"
+              variant="contained"
+              sx={{
+                backgroundColor: "#d00000",
+                borderRadius: "8px",
+                textTransform: "none",
+                "&:hover": { backgroundColor: "#9d0000" },
+              }}
+            >
+              Logout
+            </Button>
+          )}
+        </ul>
+
+        {/* MOBILE MENU ICON */}
+        <div className="block md:hidden cursor-pointer" onClick={handleNav}>
+          {nav ? <AiOutlineClose size={22} /> : <AiOutlineMenu size={22} />}
+        </div>
+
+        {/* MOBILE MENU */}
+        <ul
+          className={`fixed md:hidden top-0 left-0 h-full w-[65%] bg-[#0b0b0c] border-r border-[#222] p-6 transition-transform duration-300 
+          ${nav ? "translate-x-0" : "-translate-x-full"}`}
+        >
+          <h1 className="text-3xl font-bold text-[#00df9a] mb-6">SHOWDOWN</h1>
+
+          {userinfo && (
+            <li className="mb-3 text-[#00df9a] font-semibold uppercase tracking-wide">
+              {userinfo.username}
+            </li>
+          )}
+
+          {navItems.map((item) => (
+            <Link key={item.name} to={item.path}>
+              <li
+                onClick={handleNav}
+                className="p-4 border-b border-gray-700 text-gray-200 hover:text-[#00df9a] transition"
+              >
+                {item.name}
+              </li>
+            </Link>
+          ))}
+
+          {!userinfo ? (
+            <Button
+              onClick={() => {
+                handleNav();
+                navigate("/signin");
+              }}
+              variant="contained"
+              sx={{
+                mt: 3,
+                backgroundColor: "#7b2cbf",
+                borderRadius: "8px",
+                "&:hover": { backgroundColor: "#5a189a" },
+              }}
+            >
+              Sign In
+            </Button>
+          ) : (
+            <Button
+              onClick={() => {
+                handleLogout();
+                handleNav();
+              }}
+              variant="contained"
+              sx={{
+                mt: 3,
+                backgroundColor: "#d00000",
+                borderRadius: "8px",
+                "&:hover": { backgroundColor: "#9d0000" },
+              }}
+            >
+              Logout
+            </Button>
+          )}
+        </ul>
       </div>
-      <ul className={nav ? 'fixed z-50 left-0 top-0 w-[60%] h-full border-r border-r-gray-900 bg-[#000300] ease-in-out duration-500' : 'ease-in-out duration-500 fixed left-[-100%]'}>
-        <h1 className='w-full text-3xl font-bold text-[#00df9a] m-4'>SHOWDOWN</h1>
-        {userinfo ? <li className='p-4 text-[#00df9a] font-bold uppercase cursor-pointer'>{userinfo.username}</li> : <Button onClick={() => navigate('/signin')} id='idr' variant='contained' size='small' sx={{ marginLeft: '10px', backgroundColor: '#560bad' }}>sign-in</Button>}
-        <Link to='/'><li className='p-4 border-b border-gray-600'>Home</li></Link>
-        <Link to='/teambuilder'><li className='p-4 border-b border-gray-600'>TeamBuilder</li></Link>
-        <Link to='/myteams'><li className='p-4 border-b border-gray-600'>MyTeams</li></Link>
-        <Link to='/battle'><li className='p-4 border-b border-gray-600'>Battle</li></Link>
-        <Link to='/leaderboard'><li className='p-4'>LeaderBoard</li></Link>
-        {userinfo && <Button onClick={handleLogout} id='idr' variant='contained' size='small' sx={{ marginLeft: '10px', backgroundColor: '#560bad' }}>logout</Button>}
-      </ul>
-    </div>
+    </nav>
   );
 };
 

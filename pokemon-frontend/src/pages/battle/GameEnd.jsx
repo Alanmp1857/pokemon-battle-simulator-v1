@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import pokemonCharizardLost from '../../assets/pokemon-charizard-lost.gif';
 
 const style = {
     position: 'absolute',
@@ -36,7 +37,7 @@ const GameEnd = ({open,setOpen,winner,message,user,setRoom}) => {
                         <h2 className={`uppercase text-${winner===user ? 'green-400' : 'red-800'} text-3xl`}>{winner===user ? 'you won!' : 'you lost!'}</h2>
                         <h3>{message}</h3>
                         <div className='p-4'>
-                            <img className='h-[250px] min-w-[350px]' src={winner===user ? 'https://64.media.tumblr.com/d0b3565eca36979c310b838da3664f5c/3404aa377c129daa-ee/s540x810/93d823a12be181c59c8bacf29559a2b1337c1f53.gif' : 'https://pa1.aminoapps.com/6221/57e59b76e0d5998e05065fc14518f2522206aa29_hq.gif'} />
+                            <img className='h-[250px] min-w-[350px]' src={winner===user ? 'https://64.media.tumblr.com/d0b3565eca36979c310b838da3664f5c/3404aa377c129daa-ee/s540x810/93d823a12be181c59c8bacf29559a2b1337c1f53.gif' : pokemonCharizardLost} />
                         </div>
                     </div>
                 </div>

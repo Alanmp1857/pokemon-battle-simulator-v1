@@ -20,7 +20,8 @@ function RenderPokemon({ pokemon, ToolTip, front }) {
       return;
     }
 
-    const showdownName = pokemon.name.toLowerCase().replace(/[\s.']/g, '');
+    let showdownName = pokemon.name.toLowerCase().replace(/[\s.']/g, '');
+    showdownName = showdownName=='deoxys-normal' ? 'deoxys' : showdownName; // Showdown uses the normal form name for the sprite
     setSpriteSrc(`https://play.pokemonshowdown.com/sprites/ani${front ? '' : '-back'}/${showdownName}.gif`);
   }, [front, pokemon?.name]);
 

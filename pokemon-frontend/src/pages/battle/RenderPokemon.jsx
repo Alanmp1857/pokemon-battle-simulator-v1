@@ -21,7 +21,7 @@ function RenderPokemon({ pokemon, ToolTip, front }) {
     }
 
     let showdownName = pokemon.name.toLowerCase().replace(/[\s.']/g, '');
-    showdownName = showdownName=='deoxys-normal' ? 'deoxys' : showdownName; // Showdown uses the normal form name for the sprite
+    showdownName = showdownName.includes("-") ? showdownName.split("-")[0] : showdownName; // Showdown uses the normal form name for the sprite
     setSpriteSrc(`https://play.pokemonshowdown.com/sprites/ani${front ? '' : '-back'}/${showdownName}.gif`);
   }, [front, pokemon?.name]);
 

@@ -110,6 +110,9 @@ io.on("connection", (socket) => {
   socket.on("attack", (data) => {
     const room = data.room;
 
+    // Send opponent's move to the other player IMMEDIATELY
+    socket.to(room).emit("opponentMove", data.move);
+
     if (!attacks[room]) attacks[room] = [];
 
     if (attacks[room].length === 0) {

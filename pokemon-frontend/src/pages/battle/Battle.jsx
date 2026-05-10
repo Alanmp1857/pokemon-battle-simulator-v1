@@ -71,9 +71,11 @@ function Battle({ state, socket, room, dispatch, battleTeam, setRoom }) {
     const [lostCount, setLostCount] = useState([0, 0]);
     const [gameEnd, setGameEnd] = useState(undefined);
     const [open, setOpen] = useState(false);
-    const [timeUp, setTimeUp] = useState(30);
+    const [timeUp, setTimeUp] = useState(120);
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState('');
+
+    const [opponentMove, setOpponentMove] = useState(undefined);
 
     useEffect(() => {
         socket.emit("playerinfo", { player: state.player1, room: room });
@@ -106,10 +108,12 @@ function Battle({ state, socket, room, dispatch, battleTeam, setRoom }) {
                 player1 = data.data2;
                 player2 = data.data1;
             }
+            console.log(player1, player2);
 
             // update UI state and local copies
             dispatch({ type: 'add_entry', payload: { player: 'player1', key: 'selectedPokemon', value: player1.pokemon } });
             dispatch({ type: 'add_entry', payload: { player: 'player2', key: 'selectedPokemon', value: player2.pokemon } });
+            setOpponentMove(player2.pokemon?.selectedMove);
 
             // update local battleTeam hp if matched
             battleTeam.forEach((x, index) => {
@@ -119,7 +123,7 @@ function Battle({ state, socket, room, dispatch, battleTeam, setRoom }) {
             });
 
             setStatus([player1.message, player2.message]);
-            setTimeUp(30);
+            setTimeUp(120);
 
             // delay to show messages & check faint
             timeoutid = setTimeout(() => {
@@ -132,11 +136,18 @@ function Battle({ state, socket, room, dispatch, battleTeam, setRoom }) {
                     dispatch({ type: 'add_entry', payload: { player: 'player2', key: 'selectedPokemon', value: undefined } });
                     dispatch({ type: 'add_entry', payload: { player: 'player2', key: 'selectedMove', value: undefined } });
                 }
+                // Clear selectedMove for both players after turn ends (regardless of faint)
+                dispatch({ type: 'add_entry', payload: { player: 'player1', key: 'selectedMove', value: undefined } });
+                dispatch({ type: 'add_entry', payload: { player: 'player2', key: 'selectedMove', value: undefined } });
             }, 1400);
         })
 
         socket.on("message", (data) => {
             setMessages(m => [...m, data]);
+        })
+
+        socket.on("opponentMove", (data) => {
+            dispatch({ type: 'add_entry', payload: { player: 'player2', key: 'selectedMove', value: data } });
         })
 
         socket.on("resign", (data) => {
@@ -291,7 +302,7 @@ function Battle({ state, socket, room, dispatch, battleTeam, setRoom }) {
                                 </div>
                                 <div className='col-span-1 flex flex-col gap-3'>
                                     <div className='rounded-lg bg-[#0e0e10] border border-[#232323] p-3 flex items-center justify-center'>
-                                        <Timer setResign={setResign} timeUp={timeUp} setTimeUp={setTimeUp} move={state.player1.selectedMove} />
+                                        <Timer setResign={setResign} timeUp={timeUp} setTimeUp={setTimeUp} move={state.player1.selectedMove} oppMove={opponentMove} />
                                     </div>
                                     <div className='rounded-lg bg-[#0e0e10] border border-[#232323] p-2 flex items-center justify-center'>
                                         {resign === 'resign' && <Button size='small' color='error' variant='contained' onClick={() => setResign('confirm')}>Resign</Button>}
